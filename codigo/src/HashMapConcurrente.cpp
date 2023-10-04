@@ -18,15 +18,58 @@ unsigned int HashMapConcurrente::hashIndex(std::string clave) {
 }
 
 void HashMapConcurrente::incrementar(std::string clave) {
-    // Completar (Ejercicio 2)
+    unsigned int idx = hashIndex(clave);
+
+    mutexes[idx].lock();
+
+    bool encontreClave = false; 
+
+    for(auto &c : *tabla[idx]) {
+        if(c.first == clave){
+            c.second++;
+            encontreClave = true; 
+            break;
+        }
+    }
+
+    if(!encontreClave) {
+        tabla[idx]->insertar(std::make_pair(clave, 1));
+    }
+
+    mutexes[idx].unlock();
 }
 
 std::vector<std::string> HashMapConcurrente::claves() {
-    // Completar (Ejercicio 2)
+    std::vector<std::string> claves; 
+    
+    for(unsigned int i = 0; i < HashMapConcurrente::cantLetras; i++){
+        mutexes[i].lock();
+        for (auto &c : *tabla[i]) {
+            claves.push_back(c.first);
+        }
+    }
+
+    for(unsigned int i = 0; i < HashMapConcurrente::cantLetras; i++){
+        mutexes[i].unlock();
+    }
+
+    return claves; 
 }
 
 unsigned int HashMapConcurrente::valor(std::string clave) {
-    // Completar (Ejercicio 2)
+    unsigned int valor = 0; 
+    unsigned int idx = hashIndex(clave); 
+    
+    mutexes[idx].lock();
+    for(auto &c : *tabla[idx]) {
+        if(c.first == clave){
+            valor = c.second;
+            break;
+        }
+    }
+    mutexes[idx].unlock();
+
+    return valor; 
 }
 
 hashMapPair HashMapConcurrente::maximo() {
