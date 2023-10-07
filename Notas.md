@@ -1,4 +1,4 @@
-# Ejercicio 1
+# 1.
 
 1. Creamos un nuevo nodo con el valor dado.
 2. Guardamos el valor actual de la cabeza de la lista en cabeza_antigua.
@@ -17,9 +17,29 @@ A la hora de insertar un nuevo elemento a la lista se asegura que el programa no
 
 Utilizamos la función compare_exchange_weak para intentar actualizar el puntero \_cabeza de manera atómica. En caso de no lograrlo se vuelve a repetir.
 
-# Ejercicio 2
+# 2.
 
 Nos basamos principalmente en la idea que necesitamos garantizar que solo haya contención en caso de colisión de hash. Es decir, si dos o más threads intentan incrementar claves que caen en el mismo bucket, deben ser sincronizados. Pero si las claves caen en diferentes buckets, las operaciones deben ser concurrentes sin bloqueo.
-Pensamos en un array de mutex, donde cada mutex protege un bucket específico de la tabla de hash. De esta manera, cuando queremos incrementar una clave, solo bloqueamos el mutex del bucket correspondiente, permitiendo que otros threads modifiquen otros buckets simultáneamente. Esto ultimo es especifico para la funcion incrementar.
-La funcion claves tambien esta protegida por esa dinamica. Es decir, solo voy a poder acceder a la lista enlazada de claves de una letra en particular en caso que ningun otro thread este actualmente agregando algo en esa lista. Igualmente puede suceder que un thread agregue una clave a una letra previa cuando otro thread siga recopilando las claves. Lo que pensaba que se podia hacer es liberar los mutex una vez que ya recorri todas las claves de todas las letras. Igualmente podria suceder esto ultimo pero reduciria las posibilidades.
-La funcion valor(clave) funciona de manera similar. Solamente vamos a poder ver cuantas veces se guardo una clave si el mutex correspondiente a esa letra se libero.
+
+Pensamos en un array de mutex compartidos (shared_mutex), donde cada mutex protege un bucket específico de la tabla de hash. La particularidad del shared_mutex es que protege datos compartidos de ser accedidos simultanemante por multiples procesos. Son especialmente útiles cuando los datos compartidos pueden ser leídos de manera segura por cualquier número de proceso simultáneamente, pero un proceso solo puede escribir los mismos datos cuando ningún otro proceso está leyendo o escribiendo al mismo tiempo. A diferencia de otros tipos de mutex que facilitan el acceso exclusivo, un shared_mutex tiene dos niveles de acceso: - compartido (shared): varios threads pueden tener el mismo mutex. Si un proceso lo ha adquirido (lock_shared()), ningún otro proceso puede adquirir el bloqueo exclusivo, pero puede adquirir el bloqueo compartido. - exclusivo: solo un thread puede poseer el mutex. Si un proceso lo adquirio (lock()), ningún otro proceso puede adquirir el bloqueo (incluido el compartido).
+Solo cuando el exclusivo no ha sido adquirido por ningún proceso, el compartido puede ser adquirido por múltiples hilos. Dentro de un mismo hilo, solo se puede adquirir un bloqueo (compartido o exclusivo) al mismo tiempo.
+La razon principal para usar shared_mutex en vez de un mutex es para que los procesos que solamente quieran leer no tengan que esperar de mas.
+Referencia: https://en.cppreference.com/w/cpp/thread/shared_mutex
+
+## Incrementar
+
+De esta manera, cuando queremos incrementar una clave, bloqueamos el mutex del bucket correspondiente usando lock(), permitiendo que otros threads modifiquen otros buckets simultáneamente.
+
+## Claves
+
+La funcion claves te asegura que te va a devolver las claves que habia en el instante que las pediste. Ademas, al estar protegida por lock_shared() varios threads pueden acceder a la vez y leer las claves que hay. A medida que vamos recopilando las claves de una lista vamos liberando el mutex compartido asocidado a esa lista de manera que un proceso ya podria entrar y escribir una nueva clave en posiciones previas de las que estamos actualmente.
+
+## Valor
+
+La funcion valor(clave) funciona de manera similar. Solamente vamos a poder ver cuantas veces se guardo una clave si el mutex correspondiente a esa letra no lo tiene un proceso que quiere escribir en la lista donde se encuentra esa clave. Ademas mas de un proceso a la vez puede leer esa lista ya que funciona con la dinamica del lock_shared().
+
+# 3.
+
+# Maximo
+
+Es una idea muy similar a claves. maximo() te asegura que te va a devolver el maximo en el momento que vos llamaste a la funcion. Quizas despues entro un thread que incremento una clave previa a la que estamos viendo actualmente y supero al maximo que habia pero

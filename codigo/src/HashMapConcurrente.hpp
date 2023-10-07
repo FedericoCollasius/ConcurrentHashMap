@@ -1,7 +1,7 @@
 #ifndef HMC_HPP
 #define HMC_HPP
 
-#include <mutex>
+#include <shared_mutex>
 #include <array>
 #include <atomic>
 #include <string>
@@ -29,7 +29,7 @@ class HashMapConcurrente {
 
     static unsigned int hashIndex(std::string clave);
     
-    std::mutex mutexes[HashMapConcurrente::cantLetras];
+    std::shared_mutex mutexes[HashMapConcurrente::cantLetras];
    
 };
 
