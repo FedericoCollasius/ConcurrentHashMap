@@ -75,3 +75,22 @@ Cada thread obtiene el siguiente archivo a procesar basado en el valor de archiv
 Se optó por el uso de variables y operaciones atómicas como fetch_add para garantizar que los threads no procesen el mismo archivo más de una vez y que no se salten archivos. Esta elección elimina la necesidad de bloqueos o mutexes adicionales para coordinar el acceso a la lista de archivos.
 
 # 5.
+
+**Objetivo:**
+Evaluar que ventajas ofrece la ejecucion concurrente, en terminos de performance, a la hora de encontrar la palabra con mayor cantidad de apariciones en un conjunto de archivos.
+
+**Hipótesis General:**
+La ejecución concurrente, al utilizar múltiples threads para procesar los archivos en paralelo, ofrece una mejora significativa en el rendimiento en comparación con una ejecución secuencial, especialmente cuando tenemos muchos datos.
+Sin embargo habra un limite ya que aumentar el número de threads más allá del número de núcleos físicos disponibles podría no ofrecer ganancias adicionales e incluso podría reducir el rendimiento debido al overhead de la gestión de threads y la contención.
+
+## Posibles experimentos
+
+**Escala de la concurrencia:**
+
+- Hipótesis: Hay un punto donde agregar más threads no mejorará el rendimiento debido a la contención y el overhead de la gestión de threads.
+- Experimento: Ejecutar la función maximoParalelo con un número creciente de threads mucho más allá del número de núcleos disponibles.
+
+**Impacto de las operaciones de lectura vs. escritura:**
+
+- Hipótesis: Las operaciones de escritura son más costosas en términos de sincronización que las de lectura.
+- Experimento: Comparar el rendimiento cuando la mayoría de las operaciones son de lectura (por ejemplo, obtener el valor de una clave) versus cuando la mayoría son de escritura.
