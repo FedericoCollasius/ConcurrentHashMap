@@ -22,9 +22,9 @@ void HashMapConcurrente::incrementar(std::string clave) {
     mutexes[idx].lock();
     bool encontreClave = false; 
 
-    for(auto &c:*tabla[idx]) {
-        if(c.first == clave){
-            c.second++;
+    for(auto &p:*tabla[idx]) {
+        if(p.first == clave){
+            p.second++;
             encontreClave = true; 
             break;
         }
@@ -45,8 +45,8 @@ std::vector<std::string> HashMapConcurrente::claves() {
     }
 
     for (unsigned int i = 0; i < HashMapConcurrente::cantLetras; i++) { 
-        for (auto &c:*tabla[i]) {
-            resultado.push_back(c.first);
+        for (auto &p:*tabla[i]) {
+            resultado.push_back(p.first);
         }
         mutexes[i].unlock_shared();
     }
@@ -60,9 +60,9 @@ unsigned int HashMapConcurrente::valor(std::string clave) {
     unsigned int idx = hashIndex(clave); 
     
     mutexes[idx].lock_shared();
-    for(auto &c : *tabla[idx]) {
-        if(c.first == clave){
-            valor = c.second;
+    for(auto &p:*tabla[idx]) {
+        if(p.first == clave){
+            valor = p.second;
             break;
         }
     }
@@ -80,7 +80,7 @@ hashMapPair HashMapConcurrente::maximo() {
     }
 
     for (unsigned int i = 0; i < HashMapConcurrente::cantLetras; i++) {
-        for (auto &p : *tabla[i]) {
+        for (auto &p:*tabla[i]) {
             if (p.second > max->second) {
                 max->first = p.first;
                 max->second = p.second;
@@ -92,10 +92,47 @@ hashMapPair HashMapConcurrente::maximo() {
     return *max;
 }
 
+hashMapPair workerMaximo(ListaAtomica<hashMapPair> **tabla, std::atomic<int> &listaActual, std::shared_mutex *mutexes) {
+    hashMapPair *localMax = new hashMapPair();
+    while (true) {
+        int idx = listaActual.fetch_add(1);
+        if (idx >= HashMapConcurrente::cantLetras) break;
 
+        mutexes[idx].lock_shared();
+        for (auto &p:*tabla[idx]) {
+            if (p.second > localMax->second) {
+                localMax->first = p.first;
+                localMax->second = p.second;
+            }
+        }
+        mutexes[idx].unlock_shared();
+    }
+    return *localMax;
+}
 
 hashMapPair HashMapConcurrente::maximoParalelo(unsigned int cant_threads) {
-    
+    std::vector<std::thread> threads;
+    std::vector<hashMapPair> resultados(cant_threads);
+    std::atomic<int> listaActual(0);
+
+    for (unsigned int i = 0; i < cant_threads; i++) {
+        threads.emplace_back([&](int idx) {
+            resultados[idx] = workerMaximo(this->tabla, listaActual, this->mutexes);
+        }, i);
+    }
+
+    for (auto &t:threads) {
+        t.join();
+    }
+
+    hashMapPair *max = new hashMapPair();
+    for (auto &res:resultados) {
+        if (res.second > max->second) {
+            max->first = res.first;
+            max->second = res.second;
+        }
+    }
+    return *max;
 }
 
 #endif

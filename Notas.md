@@ -42,4 +42,36 @@ La funcion valor(clave) funciona de manera similar. Solamente vamos a poder ver 
 
 # Maximo
 
-Es una idea muy similar a claves. maximo() te asegura que te va a devolver el maximo en el momento que vos llamaste a la funcion. Quizas despues entro un thread que incremento una clave previa a la que estamos viendo actualmente y supero al maximo que habia pero
+# MaximoParalelo
+
+**Descripcion:**
+MaximoParalelo busca el par clave-valor con el máximo valor en HashMapConcurrente de manera concurrente, utilizando múltiples threads.
+
+**Estrategia para repartir el trabajo:**
+Cada thread se le asigna una fila de la tabla a la vez. El trabajo se distribuye de que cuando un thread termina de procesar una fila, toma la siguiente fila disponible. Esta estrategia garantiza que todos los threads estén constantemente trabajando y que se maximice la concurrencia, ya que no hay threads inactivos hasta que todas las filas hayan sido procesadas.
+
+**Recursos compartidos:**
+
+- El HashMapConcurrente, ya que todos los threads leen de él.
+- Un índice atómico (o contador) que rastrea qué fila está siendo procesado en tiempo real.
+- Un vector de resultados donde cada thread guarda el valor máximo encontrado en los buckets que procesa.
+
+**Protección contra condiciones de carrera:**
+
+- La función incrementar en HashMapConcurrente debe ser thread-safe para manejar múltiples accesos concurrentes.
+- El índice atómico se utiliza para garantizar que los threads accedan a las filas de manera exclusiva.
+- El vector de resultados se accede de forma que cada thread escribe en una posición única, por lo que no hay condiciones de carrera.
+
+# 4.
+
+# CargarArchivo
+
+No fue necesario tomar recaudos ya que de eso se ocupa la funcion incrementar que es la que le pasamos para cargar la clave.
+
+# CargarMultiplesArchivos
+
+Se introdujo una variable atómica, archivoActual, para tener el índice del archivo que se está procesando en tiempo real. Esto permite que cada thread sepa cuál es el siguiente archivo que debe procesar sin tener condiciones de carrera.
+Cada thread obtiene el siguiente archivo a procesar basado en el valor de archivoActual, lo procesa, y luego avanza al siguiente, hasta que todos los archivos hayan sido procesados.
+Se optó por el uso de variables y operaciones atómicas como fetch_add para garantizar que los threads no procesen el mismo archivo más de una vez y que no se salten archivos. Esta elección elimina la necesidad de bloqueos o mutexes adicionales para coordinar el acceso a la lista de archivos.
+
+# 5.

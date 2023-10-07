@@ -4,13 +4,12 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <thread>
+#include <atomic>
 
 #include "CargarArchivos.hpp"
 
-int cargarArchivo(
-    HashMapConcurrente &hashMap,
-    std::string filePath
-) {
+int cargarArchivo(HashMapConcurrente &hashMap, std::string filePath) {
     std::fstream file;
     int cant = 0;
     std::string palabraActual;
@@ -22,7 +21,7 @@ int cargarArchivo(
         return -1;
     }
     while (file >> palabraActual) {
-        // Completar (Ejercicio 4)
+        hashMap.incrementar(palabraActual);
         cant++;
     }
     // Cierro el archivo.
@@ -35,13 +34,28 @@ int cargarArchivo(
     return cant;
 }
 
+void workerCargarMultiplesArchivos(HashMapConcurrente &hashMap, std::atomic<int> &archivoActual, std::vector<std::string> &filePaths) {
+    int n = filePaths.size();
+    while(true){
+        int idx = archivoActual.fetch_add(1); 
+        if (idx >= n) break;
+        cargarArchivo(hashMap, filePaths[idx]);
+    }
+} 
 
-void cargarMultiplesArchivos(
-    HashMapConcurrente &hashMap,
-    unsigned int cantThreads,
-    std::vector<std::string> filePaths
-) {
-    // Completar (Ejercicio 4)
+void cargarMultiplesArchivos(HashMapConcurrente &hashMap, unsigned int cantThreads, std::vector<std::string> filePaths) {
+    std::vector<std::thread> threads;
+    std::atomic<int> archivoActual(0);
+
+    for (unsigned int i = 0; i < cantThreads; i++) {
+        threads.emplace_back([&] {
+            workerCargarMultiplesArchivos(hashMap, archivoActual, filePaths);
+        });
+    }
+
+    for (auto &t:threads) {
+        t.join();
+    }
 }
 
 #endif
