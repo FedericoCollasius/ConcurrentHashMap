@@ -29,6 +29,7 @@ class HashMapConcurrente {
 
     static unsigned int hashIndex(std::string clave);
     
+    //Creamos un arreglo de tamaño cantLetras, donde cada elemento es un mutex
     std::shared_mutex mutexes[HashMapConcurrente::cantLetras];
    
 };

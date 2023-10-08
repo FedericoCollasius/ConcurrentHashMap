@@ -187,6 +187,20 @@ LT_BEGIN_TEST(TestsEjercicio3, MaximoParaleloEsCorrectoDosThreads)
     LT_CHECK_EQ(actual.second, 4);
 LT_END_TEST(MaximoParaleloEsCorrectoDosThreads)
 
+
+LT_BEGIN_TEST(TestsEjercicio3, MaximoParaleloEsCorrectoCuatroThreads)
+    hM.incrementar("tiranosaurio");
+    hM.incrementar("tiranosaurio");
+    hM.incrementar("tiranosaurio");
+    hM.incrementar("tiranosaurio");
+    hM.incrementar("estegosaurio");
+    hM.incrementar("estegosaurio");
+
+    hashMapPair actual = hM.maximoParalelo(4);
+    LT_CHECK_EQ(actual.first, "tiranosaurio");
+    LT_CHECK_EQ(actual.second, 4);
+LT_END_TEST(MaximoParaleloEsCorrectoCuatroThreads)
+
 // Tests Ejercicio 4
 
 LT_BEGIN_SUITE(TestsEjercicio4)
