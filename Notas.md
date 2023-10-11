@@ -42,6 +42,15 @@ La funcion valor(clave) funciona de manera similar. Solamente vamos a poder ver 
 
 # Maximo
 
+1. Actualmente, la palabra "gato" tiene el valor máximo de 10.
+2. La palabra "perro" tiene un valor de 9.
+3. Un thread A comienza a ejecutar `maximo`.
+4. A medida que el thread A está procesando, todavía no llego a la lista donde esta "perro".
+5. Un thread B ejecuta `incrementar` para la palabra "perro", incrementando su valor a 10.
+6. Antes de que el thread A llegue a "perro", un thread C ejecuta `incrementar` para la palabra "gato", incrementando su valor a 11.
+7. El thread A finalmente llega al bucket de "perro" y ve que tiene un valor de 10, que es el valor máximo que ha visto hasta ahora (pero no es el valor máximo global actual). Como ya paso por la "g" no sabe que "gato" ahora tiene un valor de 11.
+8. El thread A concluye que "perro" con un valor de 10 es el máximo, aunque en realidad "gato" es el máximo con un valor de 11.
+
 # MaximoParalelo
 
 **Descripcion:**
