@@ -85,6 +85,8 @@ Sin embargo habra un limite ya que aumentar el número de threads más allá del
 
 ## Posibles experimentos
 
+- Como no hay enie (ni yo la tengo en mi teclado) usamos palabras en ingles si queremos usar palabras de verdad. 
+
 **Escala de la concurrencia:**
 
 - Hipótesis: Hay un punto donde agregar más threads no mejorará el rendimiento debido a la contención y el overhead de la gestión de threads.
