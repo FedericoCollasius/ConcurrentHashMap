@@ -94,3 +94,4 @@ Sin embargo habra un limite ya que aumentar el número de threads más allá del
 
 - Hipótesis: Las operaciones de escritura son más costosas en términos de sincronización que las de lectura.
 - Experimento: Comparar el rendimiento cuando la mayoría de las operaciones son de lectura (por ejemplo, obtener el valor de una clave) versus cuando la mayoría son de escritura.
+
