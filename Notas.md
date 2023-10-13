@@ -5,6 +5,8 @@
 3. Hacemos que el siguiente nodo después del nuevo nodo sea la antigua cabeza (esto es lo que nos permite insertar al principio de la lista).
 4. Usamos compare_exchange_weak para intentar establecer la cabeza de la lista al nuevo nodo. Si \_cabeza todavía apunta a cabeza_antigua, devuelve true y \_cabeza se actualiza para apuntar al nuevo nodo. Si \_cabeza ya no apunta a cabeza_antigua (otro thread modifico la lista mientras estabamos entrando), entonces compare_exchange_weak actualiza automáticamente cabeza_antigua al valor actual de \_cabeza y regresamos al comienzo del ciclo do-while para probar de nuevo.
 
+Referencia: https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange
+
 ## ¿Qué significa que la lista sea atómica?
 
 Significa que la insercion en la lista se hace sin que se interrumpa, o un proceso espera a tener premiso para hacerla.
@@ -85,7 +87,7 @@ Sin embargo habra un limite ya que aumentar el número de threads más allá del
 
 ## Posibles experimentos
 
-- Como no hay enie (ni yo la tengo en mi teclado) usamos palabras en ingles si queremos usar palabras de verdad. 
+- Como no hay enie (ni yo la tengo en mi teclado) usamos palabras en ingles si queremos usar palabras de verdad.
 
 **Escala de la concurrencia:**
 
@@ -96,4 +98,3 @@ Sin embargo habra un limite ya que aumentar el número de threads más allá del
 
 - Hipótesis: Las operaciones de escritura son más costosas en términos de sincronización que las de lectura.
 - Experimento: Comparar el rendimiento cuando la mayoría de las operaciones son de lectura (por ejemplo, obtener el valor de una clave) versus cuando la mayoría son de escritura.
-

@@ -49,5 +49,5 @@ def guardar_archivo(palabras, nombre_archivo):
 
 
 # Ejemplo 
-generar_archivo_datos(num_palabras=100, longitud_palabra=(3, 7), palabras_reales=True)
+generar_archivo_datos(num_palabras=100, longitud_palabra=(3, 7), idioma=True)
 
