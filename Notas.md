@@ -5,8 +5,6 @@
 3. Hacemos que el siguiente nodo después del nuevo nodo sea la antigua cabeza (esto es lo que nos permite insertar al principio de la lista).
 4. Usamos compare_exchange_weak para intentar establecer la cabeza de la lista al nuevo nodo. Si \_cabeza todavía apunta a cabeza_antigua, devuelve true y \_cabeza se actualiza para apuntar al nuevo nodo. Si \_cabeza ya no apunta a cabeza_antigua (otro thread modifico la lista mientras estabamos entrando), entonces compare_exchange_weak actualiza automáticamente cabeza_antigua al valor actual de \_cabeza y regresamos al comienzo del ciclo do-while para probar de nuevo.
 
-Referencia: https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange
-
 ## ¿Qué significa que la lista sea atómica?
 
 Significa que la insercion en la lista se hace sin que se interrumpa, o un proceso espera a tener premiso para hacerla.
@@ -87,18 +85,29 @@ Sin embargo habra un limite ya que aumentar el número de threads más allá del
 
 ## Posibles experimentos
 
-- Como no hay enie (ni yo la tengo en mi teclado) usamos palabras en ingles si queremos usar palabras de verdad.
-
-**Escala de la concurrencia:**
+**Escala de la concurrencia en maximoParalelo:**
 
 - Hipótesis: Hay un punto donde agregar más threads no mejorará el rendimiento debido a la contención y el overhead de la gestión de threads.
 - Experimento: Ejecutar la función maximoParalelo con un número creciente de threads mucho más allá del número de núcleos disponibles.
+- Dudas para experimento:
+  Cantidad de archivos? Longitud de las palabras? Cantidad de palabras? Cantidad de palabras que empiecen con la misma letra?
 
 **Impacto de las operaciones de lectura vs. escritura:**
 
 - Hipótesis: Las operaciones de escritura son más costosas en términos de sincronización que las de lectura.
 - Experimento: Comparar el rendimiento cuando la mayoría de las operaciones son de lectura (por ejemplo, obtener el valor de una clave) versus cuando la mayoría son de escritura.
+- Comentarios : Para el de lectura, que recorra todas las claves y nos devuelva la cantidad de repeticiones y para el de escritura, incrementar cada clave, esto por cada thread.
 
-## Formatos de experimento
+**Escala de la concurrencia en cargarMultiplesArchivos:**
 
-Movi el script de generacion de datos y los archivos que genera a una carpeta que se llama experimentacion dentro de codigo. Ahi tambien arme el template para el experimento. La idea es que para cada experimento tengamos un archivo experimento*i*.cpp. El output del experimento se va a generar en la carpeta resultados.
+- Hipótesis: Hay un punto donde agregar más threads no mejorará el rendimiento debido a la contención y el overhead de la gestión de threads.
+- Experimento: Ejecutar la función cargarMultiplesArchivos con un número creciente de threads mucho más allá del número de núcleos disponibles.
+- Dudas para experimento:
+  Cantidad de archivos? Longitud de las palabras? Cantidad de palabras? Cantidad de palabras que empiecen con la misma letra? Cargar mismos archivos?
+
+**Mismo conjunto de palabras en pocos o varios archivos:**
+
+- Hipótesis: Va a convenir que el conjunto de palabras esten distribuidas equitativamentes en varios archivos para un mayor rendimiento, cercano a la cantidad de threads que tenga el procesador.
+- Experimento: Ejecutar cargaMultiplesArchivos siempre con el mismo conjunto de palabras incrementando la cantidad de archivos. Ej: 1 archivo con 1000 palabras, luego 2 archivos con 500 palabras c/u ..... Esto por cada thread (4threads).
+- Dudas para experimento:
+  Longitud de las palabras? Cantidad de palabras? Cantidad de palabras que empiecen con la misma letra?
