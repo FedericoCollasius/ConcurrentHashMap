@@ -98,3 +98,7 @@ Sin embargo habra un limite ya que aumentar el número de threads más allá del
 
 - Hipótesis: Las operaciones de escritura son más costosas en términos de sincronización que las de lectura.
 - Experimento: Comparar el rendimiento cuando la mayoría de las operaciones son de lectura (por ejemplo, obtener el valor de una clave) versus cuando la mayoría son de escritura.
+
+## Formatos de experimento
+
+Movi el script de generacion de datos y los archivos que genera a una carpeta que se llama experimentacion dentro de codigo. Ahi tambien arme el template para el experimento. La idea es que para cada experimento tengamos un archivo experimento*i*.cpp. El output del experimento se va a generar en la carpeta resultados.
