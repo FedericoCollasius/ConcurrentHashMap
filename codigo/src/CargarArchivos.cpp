@@ -46,7 +46,6 @@ void workerCargarMultiplesArchivos(HashMapConcurrente &hashMap, std::atomic<int>
 void cargarMultiplesArchivos(HashMapConcurrente &hashMap, unsigned int cantThreads, std::vector<std::string> filePaths) {
     std::vector<std::thread> threads;
     std::atomic<int> archivoActual(0);
-
     for (unsigned int i = 0; i < cantThreads; i++) {
         threads.emplace_back([&] {
             workerCargarMultiplesArchivos(hashMap, archivoActual, filePaths);

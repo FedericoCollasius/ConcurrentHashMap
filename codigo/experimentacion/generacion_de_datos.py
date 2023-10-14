@@ -11,7 +11,7 @@ def obtener_palabras_aleatorias_del_corpus(num_palabras, longitud_palabra=None):
     todas_las_palabras = words.words()
     if longitud_palabra:
         todas_las_palabras = filtrar_por_longitud(todas_las_palabras, longitud_palabra)
-    return random.sample(todas_las_palabras, num_palabras)
+    return [palabra.lower() for palabra in random.sample(todas_las_palabras, num_palabras)]
 
 def generar_palabras_aleatorias(num_palabras, longitud_palabra):
     if longitud_palabra:
@@ -34,7 +34,7 @@ def guardar_archivo(palabras, nombre_archivo, directorio_experimento):
         os.makedirs(directorio_experimento)
     with open(f"{directorio_experimento}/{nombre_archivo}", "w") as f:
         for palabra in palabras:
-            f.write(palabra + '\n')
+            f.write(palabra.lower() + '\n')  # LAS PALABRAS TIENEN QUE ESTAR EN MINUSCULA
 
 def generar_archivo_datos(experimento_numero, num_palabras=1000, longitud_palabra=None, idioma=True, num_archivos=1):
     if idioma:
@@ -52,4 +52,5 @@ def generar_archivo_datos(experimento_numero, num_palabras=1000, longitud_palabr
 
 # Ejemplo 
 generar_archivo_datos(1, num_palabras=100, longitud_palabra=(3, 7), num_archivos=3)
+
 
