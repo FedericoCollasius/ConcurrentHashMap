@@ -42,6 +42,15 @@ La funcion valor(clave) funciona de manera similar. Solamente vamos a poder ver 
 
 # Maximo
 
+Si las funciones maximo e incrementar se ejecutan concurrentemente sin mecanismos de sincronización pueden surgir problemas con condiciones de carrera.
+
+- El thread A comienza a ejecutar maximo.
+- El thread A identifica que "arbol" tiene la cuenta más alta (10) hasta ahora y comienza a comparar con otros valores en el HashMap.
+- Antes de que el thread A termine, el thread B ejecuta incrementar varias veces para la palabra "anana", que estaba previo a "arbol" en el bucket llevandolo a 11.
+- El hilo A continúa y termina su ejecución de maximo, identificando incorrectamente que "arbol" con una cuenta de 10 es la palabra más frecuente.
+
+Sin embargo, la palabra más frecuente es en realidad "banana" con una cuenta de 11.
+
 # MaximoParalelo
 
 **Descripcion:**
