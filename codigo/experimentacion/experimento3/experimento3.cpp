@@ -10,9 +10,8 @@
 
 using namespace std;
 
-double ejecutarExperimento(int cantidadArchivo) {
+double ejecutarExperimento(int cantidadArchivo, int cantThreads) {
    
-    
     vector<string> filePath = {};
     for (int i = 1; i <= cantidadArchivo ; i++)
     {
@@ -21,13 +20,13 @@ double ejecutarExperimento(int cantidadArchivo) {
         filePath.push_back(abrir);
     }
     
-        int repes = 3;
+        int repes = 20;
         double contador = 0;
         for (int j = 0; j < repes ; j++)
         {
             HashMapConcurrente hashmap;
             clock_t start = clock();
-            cargarMultiplesArchivos(hashmap, 10, filePath);
+            cargarMultiplesArchivos(hashmap, cantThreads, filePath);
             contador += (clock() - start) / (double)CLOCKS_PER_SEC;
         }
 
@@ -36,20 +35,24 @@ double ejecutarExperimento(int cantidadArchivo) {
 }
 
 int main(int argc, char* argv[]) {
-    
-    const string OUTPUT_FILE = "resultados/divir_archivos_thread_10.txt";
 
-    ofstream outFile(OUTPUT_FILE);
-    //outFile.open(OUTPUT_FILE, ios_base::app);
+    for (int k = 1; k < 16; k++){
 
-    for (int i = 1; i < 16; i++)
-    {
-        double duracion = ejecutarExperimento(i); //Cantidad de archivos que se quiere dividir
-        string nombreExperimento = to_string(i) + " " + to_string(duracion);
-        outFile << nombreExperimento << endl;
-        cout << nombreExperimento << endl;
+        const string OUTPUT_FILE = "resultados/divir_archivos_thread_" + to_string(k) + ".txt";
+
+        ofstream outFile(OUTPUT_FILE);
+        //outFile.open(OUTPUT_FILE, ios_base::app);
+
+        for (int i = 1; i <= 8; i++){
+
+            double duracion = ejecutarExperimento(i, k); //Cantidad de archivos que se quiere dividir
+            string nombreExperimento = to_string(i) + " " + to_string(duracion);
+            outFile << nombreExperimento << endl;
+            cout << nombreExperimento << endl;
+        }
+
+        outFile.close();
     }
-   outFile.close();
 
     return 0;
 }

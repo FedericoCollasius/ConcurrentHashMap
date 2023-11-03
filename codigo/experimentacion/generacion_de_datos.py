@@ -2,7 +2,7 @@ import random
 import string
 import os
 import nltk
-nltk.download('words')
+#nltk.download('words')
 
 import nltk
 from nltk.corpus import words
@@ -75,12 +75,15 @@ def experimento3(cantidadPalabras, cantidadRepetidas):
 
 
 def dividir_archivo(archivo_entrada, cantidadArchivos):
-    totalPalabras =  336736
+    
+    totalPalabras =  36000
     cantidadPalabrasPorArchvio =  totalPalabras / cantidadArchivos
 
     with open(archivo_entrada, 'r') as entrada:
+         
          parte_actual = []
          numero_de_archivo = 1
+
          for linea in entrada:
             parte_actual.append(linea)
             if len(parte_actual) > cantidadPalabrasPorArchvio:
@@ -89,6 +92,7 @@ def dividir_archivo(archivo_entrada, cantidadArchivos):
                         salida.write(elemento)
                 numero_de_archivo += 1
                 parte_actual = []
+
          with open(f'experimento3/archivos/parte_{numero_de_archivo}_{cantidadArchivos}.txt', 'w') as salida:
             for elemento in parte_actual:
                 salida.write(elemento)
@@ -122,10 +126,12 @@ def experimento4(cantidadPalabras, cantidadRepetidas , cantidadArchivos): #distr
 
 #experimento1(100000, 5000, 15)
 #experimento2(260000, 100000)
-#experimento3(260000, 100000)
+#experimento3(26000, 10000)
+
 # Uso de la función para dividir el archivo
 #for numero in range(1, 16):
-#   dividir_archivo('experimento3/archivos/336736palabras.txt', numero)
-#experimento4(260000, 300000, 12)
+    #dividir_archivo('experimento3/archivos/36000palabras.txt', numero)
+
+experimento4(26000, 30000, 12)
   
 

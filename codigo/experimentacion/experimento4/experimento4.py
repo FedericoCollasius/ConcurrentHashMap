@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 cantidadThreads = []
 tiempo = []
 
-with open("resultados/exp4_12threads_1000000palabras.txt", "r") as archivo:
+with open("resultados/exp4_12threads_6720000palabras.txt", "r") as archivo:
 #with open("resultados/.txt", "r") as archivo:
     for linea in archivo:
         partes = linea.split()  

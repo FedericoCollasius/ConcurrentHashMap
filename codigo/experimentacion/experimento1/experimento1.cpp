@@ -7,13 +7,10 @@
 
 // g++ ../../src/HashMapConcurrente.cpp ../../src/CargarArchivos.cpp experimento1.cpp -o exp1 -std=c++17 -pthread
 
-
 using namespace std;
 
-
 double ejecutarExperimentoConThreads(int cantidadArchivo, int threads) {
-   
-    
+       
     vector<string> filePath = {};
     for (int i = 1; i <= cantidadArchivo ; i++)
     {
