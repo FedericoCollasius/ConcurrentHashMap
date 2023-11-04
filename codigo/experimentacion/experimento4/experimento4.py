@@ -18,6 +18,7 @@ plt.plot(cantidadThreads, tiempo,  color="b" , marker='x')
 # Personalizar el gráfico
 plt.xlabel('Cantidad de threads')
 plt.ylabel('Tiempo (s)')
+plt.ylim(0,0.5)
 plt.title('Tiempo en busqueda maximo vs threads')
 plt.legend(loc='best')
 plt.show()
