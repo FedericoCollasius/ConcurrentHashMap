@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 cantidadThreads = []
 tiempo = []
 
-with open("resultados/resultados_cargaArchivosConYSinThreads.txt", "r") as archivo:
+with open("resultados/pepapig.txt", "r") as archivo:
 #with open("resultados/.txt", "r") as archivo:
     for linea in archivo:
         partes = linea.split()  

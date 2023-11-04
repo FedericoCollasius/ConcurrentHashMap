@@ -18,7 +18,7 @@ double ejecutarExperimentoConThreads(int cantidadArchivo, int threads) {
         //cout << abrir << endl;
         filePath.push_back(abrir);
     }
-        int repes = 3;
+        int repes = 10;
         double contador = 0;
         for (int j = 0; j < repes ; j++)
         {
@@ -39,7 +39,7 @@ double ejecutarExperimentoSinThreads(int cantidadArchivo) {
         //cout << abrir << endl;
         filePath.push_back(abrir);
     }
-        int repes = 3;
+        int repes = 10;
         double contador = 0;
         for (int j = 0; j < repes ; j++)
         {
@@ -59,12 +59,12 @@ int main(int argc, char* argv[]) {
     const string OUTPUT_FILE = "resultados/resultados_cargaArchivosConYSinThreads.txt";
     ofstream outFile(OUTPUT_FILE);
 
-    int cantidadArchivos = 15;
+    int cantidadArchivos = 6;
     double duracion = ejecutarExperimentoSinThreads(cantidadArchivos); 
     outFile << "0 " << duracion << endl;
     cout << "0 " << duracion << endl;
 
-    for (int i = 1; i < 16; i++)
+    for (int i = 1; i < 5; i++)
     {
         double duracion = ejecutarExperimentoConThreads(cantidadArchivos , i); 
         string nombreExperimento = to_string(i) + " " + to_string(duracion);
