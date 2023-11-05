@@ -34,8 +34,8 @@
   **No evalúan aspectos de concurrencia** y por lo tanto no brindan ninguna
   garantía de que el código escrito sea correcto.
 
-  ## Generacion datos
-  * Dentro de la carpeta experimentacion, se encuentra un archivo Python para generar los datos utilizados en los experimentos. Dentro de estos archivos estan definidos en funciones para cada experimento. Para generarlo se debera descomentar la llamadora de la funcion y ejecutar el archivo .py. Estos archivos se generaran dentro de la carpeta archivos del experimento correspondiente.
+## Generacion datos
+* Dentro de la carpeta experimentacion, se encuentra un archivo Python para generar los datos utilizados en los experimentos. Dentro de estos archivos estan definidos en funciones para cada experimento. Para generarlo se debera descomentar la llamadora de la funcion y ejecutar el archivo .py. Estos archivos se generaran dentro de la carpeta archivos del experimento correspondiente.
  
 ## Realizacion experimento
 *Para ejecutar el experimento, en la carpeta experimentacion se encuentra por cada carpeta el .cpp que permite ejecutar dicho experimento. Una vez generado los archivos, abir una terminal y ingresar el comando : 
