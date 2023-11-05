@@ -2,55 +2,129 @@ import random
 import string
 import os
 import nltk
+nltk.download('words')
+
+import nltk
 from nltk.corpus import words
 
-def filtrar_por_longitud(lista, longitud):
-    return [palabra for palabra in lista if longitud[0] <= len(palabra) <= longitud[1]]
+def experimento1(cantidadPalabras , cantidadRepetidas , cantidadArchivos):
+    for i in range(1, cantidadArchivos + 1 ):
+        palabras = words.words()  
+        random.shuffle(palabras)
 
-def obtener_palabras_aleatorias_del_corpus(num_palabras, longitud_palabra=None):
-    todas_las_palabras = words.words()
-    if longitud_palabra:
-        todas_las_palabras = filtrar_por_longitud(todas_las_palabras, longitud_palabra)
-    return [palabra.lower() for palabra in random.sample(todas_las_palabras, num_palabras)]
+        palabrasSeleccionadas = palabras[:cantidadPalabras]
 
-def generar_palabras_aleatorias(num_palabras, longitud_palabra):
-    if longitud_palabra:
-        return [''.join(random.choices(string.ascii_lowercase, k=random.randint(longitud_palabra[0], longitud_palabra[1]))) for _ in range(num_palabras)]
-    else:
-        return [''.join(random.choices(string.ascii_lowercase, k=random.randint(1, 15))) for _ in range(num_palabras)]
+        cantidadPalabrasFaltantes = cantidadRepetidas
+        while cantidadPalabrasFaltantes > 0:
+            palabraQueVoyARepetir = palabrasSeleccionadas[random.randint(0, len(palabrasSeleccionadas) - 1)]
+            repetir = random.randint(1, cantidadPalabrasFaltantes)
+            for _ in range (1, repetir + 1):
+                palabrasSeleccionadas.append(palabraQueVoyARepetir)
+            cantidadPalabrasFaltantes = cantidadPalabrasFaltantes - repetir
 
-def construir_nombre_archivo(idioma, num_palabras, num_archivos, archivo_actual):
-    nombre = f"datos_{'idioma' if idioma else 'aleatorio'}_"
-    if num_archivos > 1:
-        nombre += f"parte{archivo_actual}_de_{num_archivos}_"
-    nombre += f"{num_palabras}palabras.txt"
-    return nombre
+        random.shuffle(palabrasSeleccionadas)    
 
-def construir_directorio_experimento(experimento_numero):
-    return f"archivos/experimento{experimento_numero}"
+        with open(f"experimento1/archivos/archivo_"+str(i)+".txt"    , "w") as f:
+            for palabra in palabrasSeleccionadas:
+                f.write(palabra.lower() + '\n')  # LAS PALABRAS TIENEN QUE ESTAR EN MINUSCULA
 
-def guardar_archivo(palabras, nombre_archivo, directorio_experimento):
-    if not os.path.exists(directorio_experimento):
-        os.makedirs(directorio_experimento)
-    with open(f"{directorio_experimento}/{nombre_archivo}", "w") as f:
-        for palabra in palabras:
+
+def experimento2(cantidadPalabras, cantidadRepetidas):
+    palabras = words.words()  
+    random.shuffle(palabras)
+
+    palabrasSeleccionadas = palabras[:cantidadPalabras]
+
+    cantidadPalabrasFaltantes = cantidadRepetidas
+    while cantidadPalabrasFaltantes > 0:
+         palabraQueVoyARepetir = palabrasSeleccionadas[random.randint(0, len(palabrasSeleccionadas) - 1)]
+         repetir = random.randint(1, cantidadPalabrasFaltantes)
+         for _ in range (1, repetir + 1):
+             palabrasSeleccionadas.append(palabraQueVoyARepetir)
+         cantidadPalabrasFaltantes = cantidadPalabrasFaltantes - repetir
+
+    random.shuffle(palabrasSeleccionadas)
+    #print(palabrasSeleccionadas)
+
+    with open(f"experimento2/archivos/real_{len(palabrasSeleccionadas)}palabras.txt", "w") as f:
+        for palabra in palabrasSeleccionadas:
             f.write(palabra.lower() + '\n')  # LAS PALABRAS TIENEN QUE ESTAR EN MINUSCULA
 
-def generar_archivo_datos(experimento_numero, num_palabras=1000, longitud_palabra=None, idioma=True, num_archivos=1):
-    if idioma:
-        todas_las_palabras = obtener_palabras_aleatorias_del_corpus(num_palabras * num_archivos, longitud_palabra)
-    else:
-        todas_las_palabras = generar_palabras_aleatorias(num_palabras * num_archivos, longitud_palabra)
 
-    directorio_experimento = construir_directorio_experimento(experimento_numero)
+def experimento3(cantidadPalabras, cantidadRepetidas):
+    palabras = words.words()  
+    random.shuffle(palabras)
+
+    palabrasSeleccionadas = palabras[:cantidadPalabras]
+
+    cantidadPalabrasFaltantes = cantidadRepetidas
+    while cantidadPalabrasFaltantes > 0:
+         palabraQueVoyARepetir = palabrasSeleccionadas[random.randint(0, len(palabrasSeleccionadas) - 1)]
+         repetir = random.randint(1, cantidadPalabrasFaltantes)
+         for _ in range (1, repetir + 1):
+             palabrasSeleccionadas.append(palabraQueVoyARepetir)
+         cantidadPalabrasFaltantes = cantidadPalabrasFaltantes - repetir
+
+    random.shuffle(palabrasSeleccionadas)
     
-    for i in range(num_archivos):
-        palabras_actuales = todas_las_palabras[i*num_palabras:(i+1)*num_palabras]
-        nombre_archivo = construir_nombre_archivo(idioma, num_palabras, num_archivos, i+1)
-        guardar_archivo(palabras_actuales, nombre_archivo, directorio_experimento)
-        print(f"Archivo {nombre_archivo} generado en {directorio_experimento}")
 
-# Ejemplo 
-generar_archivo_datos(1, num_palabras=100, longitud_palabra=(3, 7), num_archivos=3)
+    with open(f"experimento3/archivos/{len(palabrasSeleccionadas)}palabras.txt", "w") as f:
+        for palabra in palabrasSeleccionadas:
+            f.write(palabra.lower() + '\n')  # LAS PALABRAS TIENEN QUE ESTAR EN MINUSCULA
 
+
+def dividir_archivo(archivo_entrada, cantidadArchivos):
+    totalPalabras =  336736
+    cantidadPalabrasPorArchvio =  totalPalabras / cantidadArchivos
+
+    with open(archivo_entrada, 'r') as entrada:
+         parte_actual = []
+         numero_de_archivo = 1
+         for linea in entrada:
+            parte_actual.append(linea)
+            if len(parte_actual) > cantidadPalabrasPorArchvio:
+                with open(f'experimento3/archivos/parte_{numero_de_archivo}_{cantidadArchivos}.txt', 'w') as salida:
+                    for elemento in parte_actual:
+                        salida.write(elemento)
+                numero_de_archivo += 1
+                parte_actual = []
+         with open(f'experimento3/archivos/parte_{numero_de_archivo}_{cantidadArchivos}.txt', 'w') as salida:
+            for elemento in parte_actual:
+                salida.write(elemento)
+
+
+def experimento4(cantidadPalabras, cantidadRepetidas , cantidadArchivos): #distribucion aleatoria xq sino estamos acotados 
+    for i in range(1, cantidadArchivos + 1):
+        aleatorio_words = [''.join(random.choices(string.ascii_lowercase, k=random.randint(1, 15))) for _ in range(cantidadPalabras)]
+
+        palabras = aleatorio_words
+
+        random.shuffle(palabras)
+
+        palabrasSeleccionadas = palabras[:cantidadPalabras]
+
+        cantidadPalabrasFaltantes = cantidadRepetidas
+        while cantidadPalabrasFaltantes > 0:
+            palabraQueVoyARepetir = palabrasSeleccionadas[random.randint(0, len(palabrasSeleccionadas) - 1)]
+            repetir = random.randint(1, cantidadPalabrasFaltantes)
+            for _ in range (1, repetir + 1):
+                palabrasSeleccionadas.append(palabraQueVoyARepetir)
+            cantidadPalabrasFaltantes = cantidadPalabrasFaltantes - repetir
+
+        random.shuffle(palabrasSeleccionadas)
+        
+
+        with open(f"experimento4/archivos/archivo{i}_{len(palabrasSeleccionadas)}palabras.txt", "w") as f:
+            for palabra in palabrasSeleccionadas:
+                f.write(palabra.lower() + '\n')  # LAS PALABRAS TIENEN QUE ESTAR EN MINUSCULA
+
+
+#experimento1(100000, 5000, 16)
+#experimento2(260000, 100000)
+#experimento3(150000, 50000)
+# Uso de la función para dividir el archivo
+#for numero in range(1, 16):
+#   dividir_archivo('experimento3/archivos/336736palabras.txt', numero)
+#experimento4(260000, 300000, 12)
+  
 

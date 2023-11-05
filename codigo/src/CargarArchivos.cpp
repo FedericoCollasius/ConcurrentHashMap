@@ -37,7 +37,7 @@ int cargarArchivo(HashMapConcurrente &hashMap, std::string filePath) {
 void workerCargarMultiplesArchivos(HashMapConcurrente &hashMap, std::atomic<int> &archivoActual, std::vector<std::string> &filePaths) {
     int n = filePaths.size(); //Cantidad de archivos
     while(true){
-        int idx = archivoActual.fetch_add(1); 
+        int idx = archivoActual.fetch_add(1);
         if (idx >= n) break; //Si es igual o supere la cantidad de archivos, termino
         cargarArchivo(hashMap, filePaths[idx]); //Leo archivo
     } //Repito hasta que todos los archivos sean cargados
