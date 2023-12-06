@@ -14,17 +14,15 @@ int cargarArchivo(HashMapConcurrente &hashMap, std::string filePath) {
     int cant = 0;
     std::string palabraActual;
 
-    // Abro el archivo.
     file.open(filePath, file.in);
     if (!file.is_open()) {
         std::cerr << "Error al abrir el archivo '" << filePath << "'" << std::endl;
         return -1;
     }
     while (file >> palabraActual) {
-        hashMap.incrementar(palabraActual);//Agregamos la palabra al hash
+        hashMap.incrementar(palabraActual);
         cant++;
     }
-    // Cierro el archivo.
     if (!file.eof()) {
         std::cerr << "Error al leer el archivo" << std::endl;
         file.close();
@@ -35,12 +33,10 @@ int cargarArchivo(HashMapConcurrente &hashMap, std::string filePath) {
 }
 
 void workerCargarMultiplesArchivos(HashMapConcurrente &hashMap, std::atomic<int> &archivoActual, std::vector<std::string> &filePaths) {
-    int n = filePaths.size(); //Cantidad de archivos
-    while(true){
-        int idx = archivoActual.fetch_add(1);
-        if (idx >= n) break; //Si es igual o supere la cantidad de archivos, termino
-        cargarArchivo(hashMap, filePaths[idx]); //Leo archivo
-    } //Repito hasta que todos los archivos sean cargados
+    int cantArchivos = filePaths.size(); 
+    for(int idx = archivoActual.fetch_add(1); idx < cantArchivos; idx = archivoActual.fetch_add(1)){
+        cargarArchivo(hashMap, filePaths[idx]); 
+    }
 } 
 
 void cargarMultiplesArchivos(HashMapConcurrente &hashMap, unsigned int cantThreads, std::vector<std::string> filePaths) {
