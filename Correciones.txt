@@ -18,17 +18,17 @@ Informe: usar texttt{funcion} para destacar codigo
     - Operaciones del HashMapConcurrente: 
         - ser mas tecnicos, que tamaño tiene el vector? (Redactado, pendiente a confirmar)
     - Busqueda del Maximo: 
-        - ¿Que problemas puede ocasionar que máximoParalelo e incrementar se ejecuten concurrentemente?
+        - ¿Que problemas puede ocasionar que máximoParalelo e incrementar se ejecuten concurrentemente? (Estaba explicado en el 2do parrafo)
         - Como hicieron para proteger estos recursos de condiciones de carrera? Deben bloquear como hicieron en maximo o agregar un timestamp.
     - Cargar Archivo: 
         - En esta parte del codigo usaron un while (index < cantArchivosTotal) que no esta muy bueno Para este tipo de worker es mejor usar cosas 
         que sabes que terminan while (index < cantArchivosTotal) con su solucion si por alguna razon o error, no entra al break, entonces se 
         queda consumiendo memoria (X)
     - Experimento B: 
-        - Conclusion: por que?
+        - Conclusion: por que? (Redactado, pendiente a confirmar)
     - Experimento D: 
-        - Conclusion: hablar de colisiones 
+        - Conclusion: hablar de colisiones (Redactado, pendiente a confirmar)
     - Conclusiones finales: 
-        - falta el tradeoff? siempre me conviene usar mas threads? 
+        - falta el tradeoff? siempre me conviene usar mas threads? (Redactado, pendiente a confirmar)
 
 - Pasarle un libro como experimento 
