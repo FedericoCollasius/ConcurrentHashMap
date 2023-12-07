@@ -16,7 +16,7 @@ Informe: usar texttt{funcion} para destacar codigo
     - Insercion en Lista Enlazada: 
         - Porque se cumpe la propiedad de atomicidad y si esto evita condiciones de carrera (lo mencionan arriba pero no lo explican)
     - Operaciones del HashMapConcurrente: 
-        - ser mas tecnicos, que tamaño tiene el vector? 
+        - ser mas tecnicos, que tamaño tiene el vector? (Redactado, pendiente a confirmar)
     - Busqueda del Maximo: 
         - ¿Que problemas puede ocasionar que máximoParalelo e incrementar se ejecuten concurrentemente?
         - Como hicieron para proteger estos recursos de condiciones de carrera? Deben bloquear como hicieron en maximo o agregar un timestamp.
