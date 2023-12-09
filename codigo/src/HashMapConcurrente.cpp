@@ -74,8 +74,6 @@ hashMapPair HashMapConcurrente::maximo() {
     hashMapPair *max = new hashMapPair(); 
     max->second = 0;
 
-    // Bloqueo todos los mutexes para evitar race conditions al utilizar incrementar de manera 
-    // concurrente
     for (unsigned int i = 0; i < HashMapConcurrente::cantLetras; i++) {
         mutexes[i].lock_shared();
     }
@@ -94,22 +92,22 @@ hashMapPair HashMapConcurrente::maximo() {
 }
 
 hashMapPair workerMaximo(ListaAtomica<hashMapPair> **tabla, std::atomic<int> &listaActual, std::shared_mutex *mutexes) {
-
     hashMapPair *localMax = new hashMapPair();
 
     for (int idx = listaActual.fetch_add(1); idx < HashMapConcurrente::cantLetras; idx = listaActual.fetch_add(1)) {
-        mutexes[idx].lock_shared();
         for (auto &p: *tabla[idx]) {
             if (p.second > localMax->second) {
                 localMax->first = p.first;
                 localMax->second = p.second;
             }
         }
+        // Desbloquea el mutex correspondiente a esta letra después de procesarla.
         mutexes[idx].unlock_shared();
     }
 
     return *localMax;
 }
+
 
 hashMapPair HashMapConcurrente::maximoParalelo(unsigned int cant_threads) {
     std::vector<std::thread> threads;

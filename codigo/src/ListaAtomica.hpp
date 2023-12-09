@@ -29,14 +29,21 @@ class ListaAtomica {
         }
     }
 
-    void insertar(const T &valor) {
-        Nodo *nuevo_nodo = new Nodo(valor);
-        
-        Nodo *cabeza_antigua = _cabeza.load();
-        do {
-            nuevo_nodo->_siguiente = cabeza_antigua;
-        } while (!_cabeza.compare_exchange_weak(cabeza_antigua, nuevo_nodo));
-    }
+void insertar(const T &valor) {
+    Nodo *nuevo_nodo = new Nodo(valor);
+    
+    Nodo *cabeza_antigua = _cabeza.load();
+
+    do {
+        nuevo_nodo->_siguiente = cabeza_antigua;
+
+        // Intento de actualizar atómicamente la cabeza de la lista con el nuevo nodo.
+        // Esto se hace en un while porque otros threads pueden modificar la cabeza concurrentemente.
+        // La función compare_exchange_weak verifica si _cabeza es igual a cabeza_antigua.
+        // Si es así, _cabeza se actualiza a nuevo_nodo y se sale del bucle.
+        // Si no, cabeza_antigua se actualiza con el valor actual de _cabeza y el bucle continúa.
+    } while (!_cabeza.compare_exchange_weak(cabeza_antigua, nuevo_nodo));
+}
 
 
     T& operator[](size_t i) const {

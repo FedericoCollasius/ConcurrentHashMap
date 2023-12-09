@@ -34,6 +34,9 @@ int cargarArchivo(HashMapConcurrente &hashMap, std::string filePath) {
 
 void workerCargarMultiplesArchivos(HashMapConcurrente &hashMap, std::atomic<int> &archivoActual, std::vector<std::string> &filePaths) {
     int cantArchivos = filePaths.size(); 
+
+    // El while se ejecuta mientras haya archivos para procesar 
+    // La operacion fetch_add incrmenta archivoActual de manera atomica y devuelve el valor anterior
     for(int idx = archivoActual.fetch_add(1); idx < cantArchivos; idx = archivoActual.fetch_add(1)){
         cargarArchivo(hashMap, filePaths[idx]); 
     }
@@ -42,6 +45,7 @@ void workerCargarMultiplesArchivos(HashMapConcurrente &hashMap, std::atomic<int>
 void cargarMultiplesArchivos(HashMapConcurrente &hashMap, unsigned int cantThreads, std::vector<std::string> filePaths) {
     std::vector<std::thread> threads;
     std::atomic<int> archivoActual(0);
+
     for (unsigned int i = 0; i < cantThreads; i++) {
         threads.emplace_back([&] {
             workerCargarMultiplesArchivos(hashMap, archivoActual, filePaths);
