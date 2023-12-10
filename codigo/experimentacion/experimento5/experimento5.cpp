@@ -125,6 +125,23 @@ double contadorApariciones (vector<string> palabras , int cantidadPalabras){
     return duracion;
 }
 
+vector<std::string> readWordsIntoVector(const std::string& filename) {
+    vector<std::string> words;
+    string word;
+    ifstream file(filename);
+
+    if (file.is_open()) {
+        while (file >> word) {
+            words.push_back(word);
+        }
+        file.close();
+    } else {
+        cerr << "Unable to open file" << endl;
+    }
+
+    return words;
+}
+
 
 
 int main(int argc, char* argv[]) {
@@ -133,8 +150,7 @@ int main(int argc, char* argv[]) {
 
     const string OUTPUT_FILE = "resultado.txt";
 
-    vector<string> palabras = {"subvert","prevolitional","photic","unpestered","pattypan","nympholepsia","intercommon","erraticalness","anthemideae","lamber"};
-
+    vector<string> palabras = readWordsIntoVector("randomWordsDracula.txt");
 
     
     ofstream outFile(OUTPUT_FILE);
