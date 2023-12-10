@@ -73,36 +73,44 @@ double concurrencia (vector<string> palabras , int cantidadPalabras){
 
 
 
-
-
-double contadorApariciones (vector<string> palabras , int cantidadPalabras){
-
+void abrirArchivo(){
     const string nombre_archivo = "ejemplo.txt";
-
     ifstream archivo_entrada(nombre_archivo);
 
-    if (!archivo_entrada.is_open()) {
+        if (!archivo_entrada.is_open()) {
         cerr << "Error al abrir el archivo: " << nombre_archivo << endl;
-        return {}; // Salir con código de error
+        return;
     }
 
-    double tiempo = 0;
-        
-    for (int j = 0; j < repes ; j++)
-    {
-        auto t1 = Clock::now();
-        vector<int> contador(cantidadPalabras , 0);
-        string palabra;
-        while (archivo_entrada >> palabra) {
+}
 
-            for (int i = 0; i < cantidadPalabras; i++)
-            {
-                if (palabra == palabras[i])
-                {
-                    contador[i]++;
-                    break;
-                }
+double contadorApariciones (vector<string> palabras , int cantidadPalabras){
+    const string nombre_archivo = "ejemplo.txt";
+    double tiempo = 0;
+
+    for (int j = 0; j < repes ; j++){
+        auto t1 = Clock::now();
+
+        vector<int> contador(cantidadPalabras , 0);
+
+        for (int i = 0; i < cantidadPalabras ; i++)
+        {
+            ifstream archivo_entrada(nombre_archivo);
+
+            if (!archivo_entrada.is_open()) {
+                cerr << "Error al abrir el archivo: " << nombre_archivo << endl;
+                return {}; // Salir con código de error
             }
+
+            string palabra;
+            while (archivo_entrada >> palabra) {
+                if (palabra == palabras[i])
+                    {
+                        contador[i]++;
+                    }
+                }
+            // Cerrar el archivo
+            archivo_entrada.close();
         }
         auto t2 = Clock::now();
         tiempo += std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
@@ -113,19 +121,17 @@ double contadorApariciones (vector<string> palabras , int cantidadPalabras){
         cout << resultado2[i] << " ";
     }
     cout << endl;
-    // Cerrar el archivo
-    archivo_entrada.close();
     double duracion = tiempo / repes;
     return duracion;
-
- 
 }
+
+
 
 int main(int argc, char* argv[]) {
 
     //Eliminar del libro , : mayuscula numeros
 
-    const string OUTPUT_FILE = "exp5_12threads_6720000palabras.txt";
+    const string OUTPUT_FILE = "resultado.txt";
 
     vector<string> palabras = {"subvert","prevolitional","photic","unpestered","pattypan","nympholepsia","intercommon","erraticalness","anthemideae","lamber"};
 
@@ -136,7 +142,7 @@ int main(int argc, char* argv[]) {
     for (int i = 1; i < palabras.size() ; ++i) {
         double resultadoSinConcurrencia = contadorApariciones(palabras , i);
         double resultadoConConcurrencia = concurrencia(palabras , i);
-        string resultado = to_string(i+1) + " " + to_string(resultadoSinConcurrencia) + " " + to_string(resultadoConConcurrencia);
+        string resultado = to_string(i) + " " + to_string(resultadoSinConcurrencia) + " " + to_string(resultadoConConcurrencia);
         outFile << resultado  << endl;
         cout << sonVectoresIguales(resultado1 , resultado2) << endl;
     }
