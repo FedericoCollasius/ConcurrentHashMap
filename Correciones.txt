@@ -9,7 +9,7 @@ Codigo:
 
 Informe: usar texttt{funcion} para destacar codigo (X)
     - Los experimentos están ok, pero faltó profundizar:
-        - Tratar de articular mejor el por qué, el cómo, y el para qué de cada experimento. 
+        - Tratar de articular mejor el por qué, el cómo, y el para qué de cada experimento. (X) 
         - Falta entendimiento del trade-off de usar muchos threads y una intuición de cuándo convienen estos y 
         hasta qué punto (X, en Conclusiones Finales)
         - cuando no conviene usar concurrencia? dar un ejemplo 
