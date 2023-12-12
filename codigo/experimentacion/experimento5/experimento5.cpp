@@ -11,8 +11,7 @@ using namespace std;
 //g++ ../../src/HashMapConcurrente.cpp ../../src/CargarArchivos.cpp experimento5.cpp -o exp5 -std=c++17 -pthread
 
 
-int repes = 1;
-
+int repes = 3;
 
 
 
@@ -34,7 +33,7 @@ double concurrencia (vector<string> palabras , int cantidadPalabras){
 
         HashMapConcurrente hashmap;
         vector<string> libro = {"draculaParsed.txt"};
-        cargarMultiplesArchivos(hashmap, 1, libro); //Solo un thread carga el archivo? 
+        cargarMultiplesArchivos(hashmap, 1, libro); 
         vector<int> contador(cantidadPalabras , 0);
         for (int i = 0; i < cantidadPalabras; i++)
         {
@@ -43,17 +42,10 @@ double concurrencia (vector<string> palabras , int cantidadPalabras){
 
         auto t2 = Clock::now();
         tiempo += std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
-        resultado1 = contador;
     }
-    cout << "Con concurrencia ";
-    for (int i = 0; i < resultado1.size(); ++i) {
-        cout << resultado1[i] << " ";
-    }
-    cout << endl;
     double duracion = tiempo / repes;
     return duracion;
 }
-
 
 
 double contadorApariciones (vector<string> palabras , int cantidadPalabras){
@@ -87,17 +79,12 @@ double contadorApariciones (vector<string> palabras , int cantidadPalabras){
         auto t2 = Clock::now();
         tiempo += std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
     }
-    cout << "Sin concurrencia ";
-    for (size_t i = 0; i < resultado2.size(); ++i) {
-        cout << resultado2[i] << " ";
-    }
-    cout << endl;
     double duracion = tiempo / repes;
     return duracion;
 }
 
-vector<std::string> readWordsIntoVector(const std::string& filename) {
-    vector<std::string> words;
+vector<string> readWordsIntoVector(const string& filename) {
+    vector<string> words;
     string word;
     ifstream file(filename);
 
@@ -107,7 +94,7 @@ vector<std::string> readWordsIntoVector(const std::string& filename) {
         }
         file.close();
     } else {
-        cerr << "Unable to open file" << endl;
+        cerr << "No pude abrir archivo" << endl;
     }
 
     return words;
