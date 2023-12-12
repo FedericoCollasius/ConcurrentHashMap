@@ -114,6 +114,11 @@ hashMapPair HashMapConcurrente::maximoParalelo(unsigned int cant_threads) {
     std::vector<hashMapPair> resultados(cant_threads); 
     std::atomic<int> listaActual(0);
 
+    // Bloqueo como en maximo()
+    for (unsigned int i = 0; i < HashMapConcurrente::cantLetras; i++) {
+        mutexes[i].lock_shared();
+    }
+
     for (unsigned int i = 0; i < cant_threads; i++) {
         threads.emplace_back([&](int idx) {
             resultados[idx] = workerMaximo(this->tabla, listaActual, this->mutexes); 
