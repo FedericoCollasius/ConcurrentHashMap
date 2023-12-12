@@ -14,7 +14,6 @@ using namespace std;
 int repes = 3;
 
 
-
 double concurrencia (vector<string> palabras , int cantidadPalabras){
     const string nombre_archivo = "ejemplo.txt";
 
@@ -102,8 +101,6 @@ vector<string> readWordsIntoVector(const string& filename) {
 
 int main(int argc, char* argv[]) {
 
-
-
     const string OUTPUT_FILE = "resultado.txt";
 
     vector<string> palabras = readWordsIntoVector("randomWordsDracula.txt");
@@ -112,9 +109,6 @@ int main(int argc, char* argv[]) {
     {
         cout << palabras[i] << endl;
     }
-    
-
-
     
     ofstream outFile(OUTPUT_FILE);
 
