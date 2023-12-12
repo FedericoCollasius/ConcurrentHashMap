@@ -27,4 +27,4 @@ def select_unique_random_words(input_file_path, output_file_path, number_of_word
 
 
 parseBook('dracula.txt', 'draculaParsed.txt')
-select_unique_random_words('draculaParsed.txt', 'randomWordsDracula.txt', 10)
+select_unique_random_words('draculaParsed.txt', 'randomWordsDracula.txt', 200)

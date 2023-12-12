@@ -15,14 +15,6 @@ int repes = 3;
 
 
 double concurrencia (vector<string> palabras , int cantidadPalabras){
-    const string nombre_archivo = "ejemplo.txt";
-
-    ifstream archivo_entrada(nombre_archivo);
-
-    if (!archivo_entrada.is_open()) {
-        cerr << "Error al abrir el archivo: " << nombre_archivo << std::endl;
-        return {}; // Salir con código de error
-    }
 
     double tiempo = 0;
         
@@ -101,7 +93,7 @@ vector<string> readWordsIntoVector(const string& filename) {
 
 int main(int argc, char* argv[]) {
 
-    const string OUTPUT_FILE = "resultado.txt";
+    const string OUTPUT_FILE = "resultadoExp5.txt";
 
     vector<string> palabras = readWordsIntoVector("randomWordsDracula.txt");
 
