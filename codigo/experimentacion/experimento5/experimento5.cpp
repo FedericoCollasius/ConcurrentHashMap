@@ -10,26 +10,9 @@ using namespace std;
 
 //g++ ../../src/HashMapConcurrente.cpp ../../src/CargarArchivos.cpp experimento5.cpp -o exp5 -std=c++17 -pthread
 
-vector<int> resultado1;
-vector<int> resultado2;
+
 int repes = 1;
 
-bool sonVectoresIguales(const std::vector<int>& v1, const std::vector<int>& v2) {
-    // Verificar si los tamaños son iguales
-    if (v1.size() != v2.size()) {
-        return false;
-    }
-
-    // Comparar elemento por elemento
-    for (size_t i = 0; i < v1.size(); ++i) {
-        if (v1[i] != v2[i]) {
-            return false;
-        }
-    }
-
-    // Si todos los elementos son iguales, los vectores son iguales
-    return true;
-} 
 
 
 
@@ -73,17 +56,6 @@ double concurrencia (vector<string> palabras , int cantidadPalabras){
 
 
 
-void abrirArchivo(){
-    const string nombre_archivo = "draculaParsed.txt";
-    ifstream archivo_entrada(nombre_archivo);
-
-        if (!archivo_entrada.is_open()) {
-        cerr << "Error al abrir el archivo: " << nombre_archivo << endl;
-        return;
-    }
-
-}
-
 double contadorApariciones (vector<string> palabras , int cantidadPalabras){
     const string nombre_archivo = "draculaParsed.txt";
     double tiempo = 0;
@@ -114,7 +86,6 @@ double contadorApariciones (vector<string> palabras , int cantidadPalabras){
         }
         auto t2 = Clock::now();
         tiempo += std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
-        resultado2 = contador;
     }
     cout << "Sin concurrencia ";
     for (size_t i = 0; i < resultado2.size(); ++i) {
@@ -165,7 +136,6 @@ int main(int argc, char* argv[]) {
         double resultadoConConcurrencia = concurrencia(palabras , i);
         string resultado = to_string(i) + " " + to_string(resultadoSinConcurrencia) + " " + to_string(resultadoConConcurrencia);
         outFile << resultado  << endl;
-        cout << sonVectoresIguales(resultado1 , resultado2) << endl;
     }
     outFile.close();
 
